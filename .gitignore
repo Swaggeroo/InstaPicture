@@ -1,5 +1,7 @@
 /.idea/
 /InstaPicture.iml
+/out/
+/target/
 
 # Default ignored files
 /shelf/

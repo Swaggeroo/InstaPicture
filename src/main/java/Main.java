@@ -20,7 +20,7 @@ public class Main {
     }
 
     public Main() {
-        File[] dir = new File("pics/").listFiles();
+        File[] dir = new File("input/").listFiles();
         if (dir != null) {
             int count = 0;
             for (File file : dir){
