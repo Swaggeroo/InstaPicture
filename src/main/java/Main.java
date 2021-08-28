@@ -44,7 +44,13 @@ public class Main {
                 BufferedImage bufferedImage = ImageIO.read(images.get(i));
                 float width = bufferedImage.getWidth();
                 int height = (int)((width/16)*9);
-                bufferedImage = bufferedImage.getSubimage(0,0,bufferedImage.getWidth(),height);
+                if (height < bufferedImage.getHeight()){
+                    bufferedImage = bufferedImage.getSubimage(0,(bufferedImage.getHeight()-height)/2,bufferedImage.getWidth(),height);
+                }else {
+                    height = bufferedImage.getHeight();
+                    int newWidth = (int) ((((float) height)/9)*16);
+                    bufferedImage = bufferedImage.getSubimage((bufferedImage.getWidth()-newWidth)/2,0,newWidth,height);
+                }
 
                 BufferedImage instaPic = putOnPlainWhite(bufferedImage);
                 //showImage(instaPic);
