@@ -4,50 +4,57 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Random;
 
 public class Main {
 
-    ArrayList<File> images = new ArrayList<File>();
+    ArrayList<File> images = new ArrayList<>();
 
     public static void main(String[] args) {
         new Main();
     }
 
     public Main() {
-        File[] dir = new File("./pics/").listFiles();
+        File[] dir = new File("pics/").listFiles();
         if (dir != null) {
+            int count = 0;
             for (File file : dir){
                 if (file.isFile()){
                     if (file.getName().endsWith(".png")||file.getName().endsWith(".jpg")){
+                        count++;
+                        System.out.println("Found "+count+": "+file.getAbsolutePath());
                         images.add(file);
                     }
                 }
             }
         }
 
-        for (File img : images){
-            System.out.println(img.getAbsolutePath());
-        }
 
-        try {
-            BufferedImage bufferedImage = ImageIO.read(images.get(7));
-            float width = bufferedImage.getWidth();
-            int height = (int)((width/16)*9);
-            bufferedImage = bufferedImage.getSubimage(0,0,bufferedImage.getWidth(),height);
+        Date date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-hhmmss");
+        String strDate = dateFormat.format(date);
 
-            BufferedImage instaPic = putOnPlainWhite(bufferedImage);
-
+        for (int i = 0; i < images.size(); i++){
             try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
+                BufferedImage bufferedImage = ImageIO.read(images.get(i));
+                float width = bufferedImage.getWidth();
+                int height = (int)((width/16)*9);
+                bufferedImage = bufferedImage.getSubimage(0,0,bufferedImage.getWidth(),height);
+
+                BufferedImage instaPic = putOnPlainWhite(bufferedImage);
+                //showImage(instaPic);
+
+                File outputfile = new File("./output/insta"+strDate+"-"+(i+1)+".png");
+                ImageIO.write(instaPic, "png", outputfile);
+                System.out.println((i+1) + "/" + images.size() + "\t\t" + outputfile.getName()+"\tCreated! ");
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            File outputfile = new File("./new.jpg");
-            ImageIO.write(instaPic, "jpg", outputfile);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -75,6 +82,9 @@ public class Main {
     }
 
     private void showImage(BufferedImage bufferedImage){
+        JLabel picLabel = new JLabel(new ImageIcon(getScaledImage(bufferedImage,800,800)));
+        JPanel jPanel = new JPanel();
+        jPanel.add(picLabel);
         JFrame f = new JFrame();
         f.setBackground(Color.BLACK);
         f.setSize(new Dimension(900,900));
