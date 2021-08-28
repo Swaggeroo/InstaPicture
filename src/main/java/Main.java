@@ -25,7 +25,7 @@ public class Main {
             int count = 0;
             for (File file : dir){
                 if (file.isFile()){
-                    if (file.getName().endsWith(".png")||file.getName().endsWith(".jpg")){
+                    if (file.getName().endsWith(".png")||file.getName().endsWith(".jpg")||file.getName().endsWith(".JPG")){
                         count++;
                         System.out.println("Found "+count+": "+file.getAbsolutePath());
                         images.add(file);
